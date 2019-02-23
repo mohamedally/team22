@@ -37,6 +37,6 @@ public class MessageFeedServlet extends HttpServlet {
         Gson gson = new Gson();
         String json = gson.toJson(messages);
 
-        response.getOutputStream().println(json);
+        response.getWriter().println(json);
     }
 }
