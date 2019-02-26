@@ -50,9 +50,11 @@ public class Message {
   public String getUser() {
     return user;
   }
+  
   public String getRecipient(){
     return recipient;
   }
+  
   public String getText() {
     return text;
   }
