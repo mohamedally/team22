@@ -32,15 +32,15 @@ function setPageTitle() {
 /**
  * Shows the message form if the user is logged in and viewing their own page.
  */
-function showMessageFormIfViewingSelf() {
+function showMessageFormIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
+        if (loginStatus.isLoggedIn) {
           const messageForm = document.getElementById('message-form');
+          messageForm.action = '/messages?recipient=' + parameterUsername;
           messageForm.classList.remove('hidden');
         }
       });
@@ -93,6 +93,6 @@ function buildMessageDiv(message) {
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
+  showMessageFormIfLoggedIn();
   fetchMessages();
 }
