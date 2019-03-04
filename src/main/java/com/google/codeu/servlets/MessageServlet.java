@@ -74,13 +74,13 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     }
-
+    String recipient = request.getParameter("recipient");
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
-    Message message = new Message(user, text);
+    Message message = new Message(user, text, recipient);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/user-page.html?user=" + user);
+    response.sendRedirect("/user-page.html?user=" + recipient);
   }
 }
