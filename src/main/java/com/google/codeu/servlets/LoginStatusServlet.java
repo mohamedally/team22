@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Returns login data as JSON, e.g. {"isLoggedIn": true, "username": "alovelace@codeustudents.com"}
+ * Returns login data as JSON, e.g. {"isLoggedIn": true, "username":
+ * "alovelace@codeustudents.com"}
  */
 @WebServlet("/login-status")
 public class LoginStatusServlet extends HttpServlet {

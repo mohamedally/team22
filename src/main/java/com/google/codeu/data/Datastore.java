@@ -47,18 +47,28 @@ public class Datastore {
   }
 
   /**
-   * Gets messages posted by a specific user.
+   * Gets messages received by a specific user (recipient).
    *
-   * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending.
+   * @return a list of messages received by a user, or empty list if user has
+   *         never received a message. List is sorted by time descending.
    */
   public List<Message> getMessages(String recipient) {
-    List<Message> messages = new ArrayList<>();
-
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
             .addSort("timestamp", SortDirection.DESCENDING);
+    
+    return returnMessages(query, recipient);
+  }
+
+  public List<Message> getAllMessages() {
+    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
+
+    return returnMessages(query, null);
+  }
+
+  private List<Message> returnMessages(Query query, String username) {
+    List<Message> messages = new ArrayList<>();
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
@@ -68,7 +78,10 @@ public class Datastore {
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
         String user = (String) entity.getProperty("user");
+        String recipient = recipient != null ? recipient : (String) entity.getProperty("recipient");
+
         Message message = new Message(id, user, text, timestamp, recipient);
+
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -78,5 +91,6 @@ public class Datastore {
     }
 
     return messages;
+
   }
 }
