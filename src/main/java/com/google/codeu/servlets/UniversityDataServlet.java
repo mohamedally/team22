@@ -29,8 +29,8 @@ public class UniversityDataServlet extends HttpServlet {
             System.out.println(line);
             
             String university = cells[0];
-            double lat = Double.parseDouble(cells[7]);
-            double lng = Double.parseDouble(cells[8]);
+            double lat = Double.parseDouble(cells[5]);
+            double lng = Double.parseDouble(cells[6]);
             
             UniversityLocationArray.add(gson.toJsonTree(new UniversityLocation(university, lat, lng)));
         }
