@@ -12,7 +12,7 @@ import com.google.gson.JsonArray;
 /**
  * Returns University data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
  */
-@WebServlet("/University-data")
+@WebServlet("/university-data")
 public class UniversityDataServlet extends HttpServlet {
     JsonArray UniversityLocationArray;
 
