@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 /**
- * Returns University data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
+ * Returns University data as a JSON array, e.g. [{"university": "Princeton University", "city":"Princeton", "state":"NJ", "rank":1, "udergraduates":5402, "lat": 40.3439, "lng": -74.6514}]
  */
 @WebServlet("/university-data")
 public class UniversityDataServlet extends HttpServlet {
@@ -29,10 +29,14 @@ public class UniversityDataServlet extends HttpServlet {
             System.out.println(line);
             
             String university = cells[0];
+            String city = cells[1];
+            String state = cells[2];
+            int rank = Integer.parseInt(cells[3]);
+            int undergraduates = Integer.parseInt(cells[4]);
             double lat = Double.parseDouble(cells[5]);
             double lng = Double.parseDouble(cells[6]);
             
-            UniversityLocationArray.add(gson.toJsonTree(new UniversityLocation(university, lat, lng)));
+            UniversityLocationArray.add(gson.toJsonTree(new UniversityLocation(university, city, state, rank, undergraduates, lat, lng)));
         }
         scanner.close();
     }
@@ -45,11 +49,19 @@ public class UniversityDataServlet extends HttpServlet {
     
     private static class UniversityLocation{
         String university;
+        String city;
+        String state;
+        int rank;
+        int undergraduates;
         double lat;
         double lng;
     
-        private UniversityLocation(String university, double lat, double lng) {
+        private UniversityLocation(String university, String city, String state, int rank, int undergraduates, double lat, double lng) {
             this.university = university;
+            this.city = city;
+            this.state = state;
+            this.rank = rank;
+            this.undergraduates = undergraduates;
             this.lat = lat;
             this.lng = lng;
         }

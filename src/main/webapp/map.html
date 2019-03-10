@@ -1,41 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>American Universities</title>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD70_zBqbeqjcuZDe1mbQMo1OFE_RCmBes"></script>
-  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-  <script>  
-    function createUniversitiesMap(){
-          fetch('/university-data').then(function(response) {
-                return response.json();
-          }).then((universities) => {
-              
-                const map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 35.78613674, lng: -119.4491691},
-                    zoom:7
-                });
-                
-                var markers = universities.map(function(university){
-                    return new google.maps.Marker({
-                        position: {lat: university.lat, lng: university.lng},
-                        map: map
-                    }); 
-                });
-                
-                var markerCluster = new google.maps.MarkerClusterer(map, markers,
-                    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-          });
-    }
-  </script>
-  <style>
-    #map{
-      width: 500px;
-      height: 500px;
-    }
-  </style>
+    <title>American Universities</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/map.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD70_zBqbeqjcuZDe1mbQMo1OFE_RCmBes"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="/js/map-loader.js"></script>
+  
 </head>
 <body onload="createUniversitiesMap();">
- <h1>American Universities</h1>
- <div id="map"></div>
+    <h1>American Universities</h1>
+    <div id="map"></div>
 </body>
 </html>
