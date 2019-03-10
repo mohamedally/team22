@@ -3,6 +3,7 @@
 <head>
   <title>American Universities</title>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD70_zBqbeqjcuZDe1mbQMo1OFE_RCmBes"></script>
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>  
     function createUniversitiesMap(){
           fetch('/university-data').then(function(response) {
@@ -10,7 +11,7 @@
           }).then((universities) => {
               
                 const map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 35.78613674, lng: -119.4491591},
+                    center: {lat: 35.78613674, lng: -119.4491691},
                     zoom:7
                 });
                 
@@ -20,7 +21,8 @@
                         map: map
                     }); 
                 });
-                var markerCluster = new MarkerClusterer(map, markers,
+                
+                var markerCluster = new google.maps.MarkerClusterer(map, markers,
                     {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
           });
     }

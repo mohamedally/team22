@@ -21,9 +21,12 @@ public class UniversityDataServlet extends HttpServlet {
         UniversityLocationArray = new JsonArray();
         Gson gson = new Gson();
         Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/National-Universities-Rankings-Located.csv"));
+        scanner.nextLine();
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] cells = line.split(",");
+            
+            System.out.println(line);
             
             String university = cells[0];
             double lat = Double.parseDouble(cells[7]);
