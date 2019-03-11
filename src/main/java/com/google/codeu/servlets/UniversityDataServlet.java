@@ -26,8 +26,6 @@ public class UniversityDataServlet extends HttpServlet {
             String line = scanner.nextLine();
             String[] cells = line.split(",");
             
-            System.out.println(line);
-            
             String university = cells[0];
             String city = cells[1];
             String state = cells[2];
