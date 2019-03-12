@@ -30,67 +30,98 @@ import java.util.UUID;
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
 
-  private DatastoreService datastore;
+    private DatastoreService datastore;
 
-  public Datastore() {
-    datastore = DatastoreServiceFactory.getDatastoreService();
-  }
-
-  /** Stores the Message in Datastore. */
-  public void storeMessage(Message message) {
-    Entity messageEntity = new Entity("Message", message.getId().toString());
-    messageEntity.setProperty("user", message.getUser());
-    messageEntity.setProperty("text", message.getText());
-    messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("recipient", message.getRecipient());
-    datastore.put(messageEntity);
-  }
-
-  /**
-   * Gets messages received by a specific user (recipient).
-   *
-   * @return a list of messages received by a user, or empty list if user has
-   *         never received a message. List is sorted by time descending.
-   */
-  public List<Message> getMessages(String recipient) {
-    Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
-            .addSort("timestamp", SortDirection.DESCENDING);
-    
-    return returnMessages(query, recipient);
-  }
-
-  public List<Message> getAllMessages() {
-    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
-
-    return returnMessages(query, null);
-  }
-
-  private List<Message> returnMessages(Query query, String recipient) {
-    List<Message> messages = new ArrayList<>();
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-        String user = (String) entity.getProperty("user");
-        recipient = recipient != null ? recipient : (String) entity.getProperty("recipient");
-
-        Message message = new Message(id, user, text, timestamp, recipient);
-
-        messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
+    public Datastore() {
+        datastore = DatastoreServiceFactory.getDatastoreService();
     }
 
-    return messages;
+    /** Stores the Message in Datastore. */
+    public void storeMessage(Message message) {
+        Entity messageEntity = new Entity("Message", message.getId().toString());
+        messageEntity.setProperty("user", message.getUser());
+        messageEntity.setProperty("text", message.getText());
+        messageEntity.setProperty("timestamp", message.getTimestamp());
+        messageEntity.setProperty("recipient", message.getRecipient());
+        datastore.put(messageEntity);
+    }
 
-  }
+    /**
+    * Gets messages received by a specific user (recipient).
+    *
+    * @return a list of messages received by a user, or empty list if user has
+    *         never received a message. List is sorted by time descending.
+    */
+    public List<Message> getMessages(String recipient) {
+        Query query =
+            new Query("Message")
+                .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
+                .addSort("timestamp", SortDirection.DESCENDING);
+        
+        return returnMessages(query, recipient);
+    }
+
+    public List<Message> getAllMessages() {
+        Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
+    
+        return returnMessages(query, null);
+    }
+
+    private List<Message> returnMessages(Query query, String recipient) {
+        List<Message> messages = new ArrayList<>();
+        PreparedQuery results = datastore.prepare(query);
+    
+        for (Entity entity : results.asIterable()) {
+            try {
+                String idString = entity.getKey().getName();
+                UUID id = UUID.fromString(idString);
+                String text = (String) entity.getProperty("text");
+                long timestamp = (long) entity.getProperty("timestamp");
+                String user = (String) entity.getProperty("user");
+                recipient = recipient != null ? recipient : (String) entity.getProperty("recipient");
+        
+                Message message = new Message(id, user, text, timestamp, recipient);
+        
+                messages.add(message);
+            } catch (Exception e) {
+                System.err.println("Error reading message.");
+                System.err.println(entity.toString());
+                e.printStackTrace();
+            }
+        }
+    
+        return messages;
+
+    }
+  
+    public List<UserMarker> getMarkers() {
+        List<UserMarker> markers = new ArrayList<>();
+    
+        Query query = new Query("UserMarker");
+        PreparedQuery results = datastore.prepare(query);
+    
+        for (Entity entity : results.asIterable()) {
+            try {
+                double lat = (double) entity.getProperty("lat");
+                double lng = (double) entity.getProperty("lng");    
+                String content = (String) entity.getProperty("content");
+            
+                UserMarker marker = new UserMarker(lat, lng, content);
+                markers.add(marker);
+            } catch (Exception e) {
+                System.err.println("Error reading marker.");
+                System.err.println(entity.toString());
+                e.printStackTrace();
+            }
+        }
+        return markers;
+    }
+
+    public void storeMarker(UserMarker marker) {
+        Entity markerEntity = new Entity("UserMarker");
+        markerEntity.setProperty("lat", marker.getLat());
+        markerEntity.setProperty("lng", marker.getLng());
+        markerEntity.setProperty("content", marker.getContent());
+        datastore.put(markerEntity);
+    }
 }
