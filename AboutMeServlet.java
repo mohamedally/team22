@@ -46,7 +46,7 @@ public class AboutMeServlet extends HttpServlet {
 
     User userData = datastore.getUser(user);
 
-    if(userData == null || userData.getAboutMe() == null) {
+    if(!userData || !userData.getAboutMe()) {
       return;
     }
 
@@ -64,8 +64,6 @@ public class AboutMeServlet extends HttpServlet {
     }
 
     String userEmail = userService.getCurrentUser().getEmail();
-    //String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
-
 
     String userEnteredContent = request.getParameter("about-me");
     Whitelist whitelist = Whitelist.simpleText();
