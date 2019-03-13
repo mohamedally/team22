@@ -80,18 +80,18 @@ public class Datastore {
     return messages;
   }
 
-   /** Stores the User in Datastore. */
+  /** Stores the User in Datastore. */
   public void storeUser(User user) {
     Entity userEntity = new Entity("User", user.getEmail());
     userEntity.setProperty("email", user.getEmail());
     userEntity.setProperty("aboutMe", user.getAboutMe());
     datastore.put(userEntity);
-  }
+   }
    
    /**
     * Returns the User owned by the email address, or
     * null if no matching User was found.
-    */
+   */
   public User getUser(String email) {
    
     Query query = new Query("User")
@@ -99,7 +99,7 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if(userEntity == null) {
-     return null;
+      return null;
     }
     
     String aboutMe = (String) userEntity.getProperty("aboutMe");
