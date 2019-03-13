@@ -39,7 +39,7 @@ public class AboutMeServlet extends HttpServlet {
 
     String user = request.getParameter("user");
 
-    if(user == null || user.equals("")) {
+    if(!user) {
       // Request is invalid, return empty response
       return;
     }
