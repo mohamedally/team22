@@ -52,7 +52,7 @@ public class MessageServlet extends HttpServlet {
 
     String user = request.getParameter("user");
 
-    if (user == null || user.equals("")) {
+    if (!user) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
@@ -76,12 +76,11 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    //String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     String userEnteredContent = request.getParameter("text");
     Whitelist whitelist = Whitelist.simpleText();
     whitelist.addAttributes("b", "strong", "i", "em", "mark", "small", "del", "sup", "sub");
     String text = Jsoup.clean(userEnteredContent, whitelist);
-    //text.addAttributes("b", "strong", "i", "em", "mark", "small", "del", "sup", "sub");
+
 
     Message message = new Message(user, text);
     datastore.storeMessage(message);
