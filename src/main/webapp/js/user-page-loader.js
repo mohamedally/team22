@@ -46,6 +46,14 @@ function showMessageFormIfLoggedIn() {
       });
 }
 
+function showTranslationTest(){
+    fetch('/translations').then((response) =>{
+        return response.json();
+    }).then((message) => {
+        document.body = message;
+    });
+}
+
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
   const url = '/messages?user=' + parameterUsername;
@@ -95,4 +103,5 @@ function buildUI() {
   setPageTitle();
   showMessageFormIfLoggedIn();
   fetchMessages();
+  showTranslationTest();
 }
