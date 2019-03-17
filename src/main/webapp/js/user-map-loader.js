@@ -22,7 +22,7 @@ function buildInfoWindowInput(lat, lng){
 function createMarkerForEdit(lat, lng){
     
     if(editMarker){
-        editMarker.setMap(null)
+        editMarker.setMap(null);
     }
 
     const editMarker = new google.maps.Marker({
@@ -36,6 +36,7 @@ function createMarkerForEdit(lat, lng){
     
     google.maps.event.addListener(infoWindow, 'closeclick', () => {
         editMarker.setMap(null);
+        postMarker(lat,lng,infoWindow.content);
     });
           
     infoWindow.open(map, editMarker);
@@ -53,19 +54,8 @@ function createMarkerForDisplay(lat, lng, content){
         content: content
     });
     
-    marker.addListener('click', function() => {
+    marker.addListener('click', () => {
         infoWindow.open(map, marker);
-    });
-}
-function fetchMarkers(){
-    fetch('/user-markers').then((response) => {
-        return response.json();
-    }).then((markers) => {
-        var map_markers = [];
-        markers.forEach((marker) => {
-            map_markers.push(createMarkerForDisplay(marker.lat, marker.lng, marker.content)
-        }); 
-        return map_markers;
     });
 }
 function postMarker(lat, lng, content){
@@ -83,17 +73,20 @@ function postMarker(lat, lng, content){
  * Fetches and displays user markers in map
  */
 function createUserMap(){
-    const map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 35.78613674, lng: -119.4491691},
-        zoom:7
-    });
-    var markers = fetchMarkers();
+    fetch('/user-markers').then((response) => {
+        return response.json();
+    }).then((markers) => {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 35.78613674, lng: -119.4491691},
+            zoom:7
+        });
+        
+        markers.forEach((marker) => {
+            createMarkerForDisplay(marker.lat, marker.lng, marker.content);
+        });
     
-    map.addListener('click', (event) => {
-        markers.push(createMarkerForEdit(event.latLng.lat(), event.latLng.lng()));
-    });
-    
-    var markerCluster = new MarkerClusterer(map, markers,
-        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        map.addListener('click', (create_event) => {
+            createMarkerForEdit(create_event.latLng.lat(), create_event.latLng.lng());
+        });
     });
 }
