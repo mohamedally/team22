@@ -39,6 +39,8 @@ function createMarkerForEdit(lat, lng){
     });
           
     infoWindow.open(map, editMarker);
+    
+    return editMarker;
 }
 function createMarkerForDisplay(lat, lng, content){
 
@@ -51,7 +53,7 @@ function createMarkerForDisplay(lat, lng, content){
         content: content
     });
     
-    marker.addListener('click', () => {
+    marker.addListener('click', function() => {
         infoWindow.open(map, marker);
     });
 }
@@ -59,10 +61,11 @@ function fetchMarkers(){
     fetch('/user-markers').then((response) => {
         return response.json();
     }).then((markers) => {
+        var map_markers = [];
         markers.forEach((marker) => {
-            createMarkerForDisplay(marker.lat, marker.lng, marker.content)
+            map_markers.push(createMarkerForDisplay(marker.lat, marker.lng, marker.content)
         }); 
-        return markers;
+        return map_markers;
     });
 }
 function postMarker(lat, lng, content){
@@ -80,10 +83,16 @@ function postMarker(lat, lng, content){
  * Fetches and displays user markers in map
  */
 function createUserMap(){
-    map.addListener('click', (event) => {
-        createMarkerForEdit(event.latLng.lat(), event.latLng.lng());
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 35.78613674, lng: -119.4491691},
+        zoom:7
     });
     var markers = fetchMarkers();
+    
+    map.addListener('click', (event) => {
+        markers.push(createMarkerForEdit(event.latLng.lat(), event.latLng.lng()));
+    });
+    
     var markerCluster = new MarkerClusterer(map, markers,
         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
     });
