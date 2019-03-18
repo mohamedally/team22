@@ -7,6 +7,7 @@ function buildInfoWindowInput(lat, lng){
       button.appendChild(document.createTextNode('Submit'));
       
       button.onclick = () => {
+            postMarker(lat,lng,textBox.value);
             createMarkerForDisplay(lat, lng, textBox.value);
             editMarker.setMap(null);
       };
@@ -25,7 +26,7 @@ function createMarkerForEdit(lat, lng){
         editMarker.setMap(null);
     }
 
-    const editMarker = new google.maps.Marker({
+    editMarker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
         map: map
     });  
@@ -36,7 +37,6 @@ function createMarkerForEdit(lat, lng){
     
     google.maps.event.addListener(infoWindow, 'closeclick', () => {
         editMarker.setMap(null);
-        postMarker(lat,lng,infoWindow.content);
     });
           
     infoWindow.open(map, editMarker);
@@ -73,20 +73,23 @@ function postMarker(lat, lng, content){
  * Fetches and displays user markers in map
  */
 function createUserMap(){
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 35.78613674, lng: -119.4491691},
+        zoom:7
+    });
+        
+    map.addListener('rightclick', (create_event) => {
+        document.write("Clicked!")
+        createMarkerForEdit(create_event.latLng.lat(), create_event.latLng.lng());
+    });
+    
     fetch('/user-markers').then((response) => {
         return response.json();
     }).then((markers) => {
-        const map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 35.78613674, lng: -119.4491691},
-            zoom:7
-        });
         
         markers.forEach((marker) => {
             createMarkerForDisplay(marker.lat, marker.lng, marker.content);
         });
     
-        map.addListener('click', (create_event) => {
-            createMarkerForEdit(create_event.latLng.lat(), create_event.latLng.lng());
-        });
     });
 }
