@@ -79,7 +79,6 @@ function createUserMap(){
     });
         
     map.addListener('rightclick', (create_event) => {
-        document.write("Clicked!")
         createMarkerForEdit(create_event.latLng.lat(), create_event.latLng.lng());
     });
     
@@ -90,6 +89,6 @@ function createUserMap(){
         markers.forEach((marker) => {
             createMarkerForDisplay(marker.lat, marker.lng, marker.content);
         });
-    
+
     });
 }
