@@ -41,17 +41,52 @@ public class Event {
         this.timeStamp = timeStamp;
     }
     
-    public UUID getEventId;
-    public String getSpeaker;
-    public String getOrganization;
-    public Date getEventDate;
-    public Location getLocation;
-    public List<String> getAmmenities;
-    public String getExternalLink;
-    public PublicType getPublicType;
-    public int getOwnerId;
-    public List<ThreadComment> getThread;
-    public long getTimeStamp;
+    public UUID getEventId(){
+        return eventId;
+    }
+
+    public String getSpeaker(){
+        return speaker;
+    }
+
+    public String getOrganization(){
+        return organization;
+    }
+
+    public Date getEventDate(){
+        return eventDate;
+    }
+
+    public Location getLocation(){
+        return location;
+    }
+
+    public List<String> getAmmenities(){
+        return ammenities;
+    }
+
+    public String getExternalLink(){
+        return externalLink;
+    }
+
+    public PublicType getPublicType(){
+        return publicType;
+    }
+
+    public int getOwnerId(){
+        return ownerId;
+    }
+
+    public List<ThreadComment> getThread(){
+        return thread;
+    }
     
+    public void addThreadComment(ThreadComment comment){
+        thread.add(comment);
+    }
+
+    public long getTimeStamp(){
+        return timeStamp;
+    }
     
 }

@@ -124,4 +124,19 @@ public class Datastore {
         markerEntity.setProperty("content", marker.getContent());
         datastore.put(markerEntity);
     }
+    
+    public void storeEvent(Event event){
+        Entity eventEntity = new Entity("Event");
+        private UUID eventId;
+        private String speaker;
+        private String organization;
+        private Date eventDate;
+        private Location location;
+        private List<String> ammenities;
+        private String externalLink;
+        private PublicType publicType;
+        private int ownerId;
+        private List<ThreadComment> thread;
+        private long timeStamp;
+    }
 }
