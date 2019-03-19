@@ -219,11 +219,15 @@ public class Datastore {
         eventEntity.setProperty("organization", event.getOrganization());
         eventEntity.setProperty("eventDate", event.getEventDate());
         eventEntity.setProperty("location", event.getLocation());
-        eventEntity.setProperty("amenities", event.getAmenities());
+        for (String am: event.getAmenities()){
+            storeAmenity(am, event.getEventId());
+        }
         eventEntity.setProperty("externalLink", event.getExternalLink());
         eventEntity.setProperty("publicType", event.getPublicType());
         eventEntity.setProperty("ownerId", event.getOwnerId());
-        eventEntity.setProperty("thread", event.getThread());
+        for (ThreadComment cm: event.getThread()){
+            storeThreadComment(cm);
+        }
         eventEntity.setProperty("timeStamp", event.getTimeStamp());
         datastore.put(eventEntity);
     }   
