@@ -24,7 +24,7 @@ public class Event {
     private long timeStamp;
     
     public Event(String speaker, String organization, Date eventDate, Location location, List<String> ammenities, String externalLink, PublicType publicType, int ownerId){
-        this.Event(UUID.randomUUID(), System.currentTimeMillis(), speaker, organization, eventDate, location, ammenities, externalLink, publicType, ownerId);
+        this(UUID.randomUUID(), System.currentTimeMillis(), speaker, organization, eventDate, location, ammenities, externalLink, publicType, ownerId);
     }
     
     public Event(UUID id, long timeStamp, String speaker, String organization, Date eventDate, Location location, List<String> ammenities, String externalLink, PublicType publicType, int ownerId){
@@ -40,6 +40,18 @@ public class Event {
         this.thread = new ArrayList<ThreadComment>();
         this.timeStamp = timeStamp;
     }
+    
+    public UUID getEventId;
+    public String getSpeaker;
+    public String getOrganization;
+    public Date getEventDate;
+    public Location getLocation;
+    public List<String> getAmmenities;
+    public String getExternalLink;
+    public PublicType getPublicType;
+    public int getOwnerId;
+    public List<ThreadComment> getThread;
+    public long getTimeStamp;
     
     
 }
