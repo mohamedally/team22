@@ -8,7 +8,7 @@ public class ThreadComment {
   private UUID id;
   private String user;
   private String text;
-  private int eventId;
+  private UUID eventId;
   private long timestamp;
 
   /**
@@ -16,11 +16,11 @@ public class ThreadComment {
    * content. Generates a random ID and uses the current system time for the
    * creation time.
    */
-  public ThreadComment(String user, String text, int eventId) {
+  public ThreadComment(String user, String text, UUID eventId) {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), eventId);
   }
 
-  public ThreadComment(UUID id, String user, String text, long timestamp, int eventId) {
+  public ThreadComment(UUID id, String user, String text, long timestamp, UUID eventId) {
     this.id = id;
     this.user = user;
     this.text = text;
@@ -36,7 +36,7 @@ public class ThreadComment {
     return user;
   }
   
-  public int getEventId(){
+  public UUID getEventId(){
     return eventId;
   }
   

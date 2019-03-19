@@ -26,6 +26,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Date;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -125,19 +126,121 @@ public class Datastore {
         datastore.put(markerEntity);
     }
     
+    public List<Event> getEvents(){
+        List<Event> events = new ArrayList<>();
+    
+        Query query = new Query("Event");
+        PreparedQuery results = datastore.prepare(query);
+        
+        for (Entity entity : results.asIterable()) {
+            try {
+                
+                String idString = entity.getKey().getName();
+                UUID eventId = UUID.fromString(idString);
+                String speaker =  (String) entity.getProperty("speaker");
+                String organization =  (String) entity.getProperty("organization");
+                Date eventDate =  (Date) entity.getProperty("eventDate");
+                Location location =  (Location) entity.getProperty("location");
+                List<String> amenities =  getAmenities(eventId);
+                String externalLink =  (String) entity.getProperty("externalLink");
+                PublicType publicType =  (PublicType) entity.getProperty("publicType");
+                int ownerId =  (int) entity.getProperty("ownerId");
+                List<ThreadComment> thread =  getThread(eventId);
+                long timeStamp =  (long) entity.getProperty("timestamp");
+            
+                Event event = new Event(eventId, timeStamp, speaker, organization, eventDate, location, amenities, externalLink, publicType, ownerId);
+                event.copyThread(thread);
+                events.add(event);
+            } catch (Exception e) {
+                System.err.println("Error reading event.");
+                System.err.println(entity.toString());
+                e.printStackTrace();
+            }
+        }
+        
+        return events;
+    }
+    
+    public List<String> getAmenities(UUID eventId){
+        List<String> amenities = new ArrayList<>();
+        
+        Query query = new Query("Amenity").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
+                .addSort("timestamp", SortDirection.DESCENDING);
+        PreparedQuery results = datastore.prepare(query);
+        
+        for (Entity entity : results.asIterable()) {
+            try {
+                String text = (String) entity.getProperty("amenity");
+        
+                amenities.add(text);
+            } catch (Exception e) {
+                System.err.println("Error reading message.");
+                System.err.println(entity.toString());
+                e.printStackTrace();
+            }
+        }
+        
+        return amenities;
+        
+        
+    }
+    
+    public List<ThreadComment> getThread(UUID eventId){
+        List<ThreadComment> thread = new ArrayList<>();
+        
+        Query query = new Query("ThreadComment").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
+                .addSort("timestamp", SortDirection.DESCENDING);
+        PreparedQuery results = datastore.prepare(query);
+        
+        for (Entity entity : results.asIterable()) {
+            try {
+                String idString = entity.getKey().getName();
+                UUID id = UUID.fromString(idString);
+                String text = (String) entity.getProperty("text");
+                long timestamp = (long) entity.getProperty("timestamp");
+                String user = (String) entity.getProperty("user");
+                ThreadComment comment = new ThreadComment(id, user, text, timestamp, eventId);
+                thread.add(comment);
+            } catch (Exception e) {
+                System.err.println("Error reading message.");
+                System.err.println(entity.toString());
+                e.printStackTrace();
+            }
+        }
+        
+        return thread;
+        
+        
+    }
+    
     public void storeEvent(Event event){
-        Entity eventEntity = new Entity("Event");
-        eventEntity.setProperty("eventId", event.getEventId());
+        Entity eventEntity = new Entity("Event", event.getEventId().toString());
         eventEntity.setProperty("speaker", event.getSpeaker());
         eventEntity.setProperty("organization", event.getOrganization());
         eventEntity.setProperty("eventDate", event.getEventDate());
         eventEntity.setProperty("location", event.getLocation());
-        eventEntity.setProperty("ammenities", event.getAmmenities());
+        eventEntity.setProperty("amenities", event.getAmenities());
         eventEntity.setProperty("externalLink", event.getExternalLink());
         eventEntity.setProperty("publicType", event.getPublicType());
         eventEntity.setProperty("ownerId", event.getOwnerId());
         eventEntity.setProperty("thread", event.getThread());
         eventEntity.setProperty("timeStamp", event.getTimeStamp());
         datastore.put(eventEntity);
+    }   
+    
+    public void storeAmenity(String amenity,UUID eventId){
+        Entity amenityEntity = new Entity("Amenity");
+        amenityEntity.setProperty("eventId", eventId.toString());
+        amenityEntity.setProperty("amenity", amenity);
+        datastore.put(amenityEntity);
+    }
+    
+    public void storeThreadComment(ThreadComment comment){
+        Entity threadCommentEntity = new Entity("ThreadComment", comment.getId().toString());
+        threadCommentEntity.setProperty("eventId", comment.getEventId().toString());
+        threadCommentEntity.setProperty("user", comment.getUser());
+        threadCommentEntity.setProperty("text", comment.getText());
+        threadCommentEntity.setProperty("timestamp", comment.getTimestamp());
+        datastore.put(threadCommentEntity);
     }
 }
