@@ -127,16 +127,17 @@ public class Datastore {
     
     public void storeEvent(Event event){
         Entity eventEntity = new Entity("Event");
-        private UUID eventId;
-        private String speaker;
-        private String organization;
-        private Date eventDate;
-        private Location location;
-        private List<String> ammenities;
-        private String externalLink;
-        private PublicType publicType;
-        private int ownerId;
-        private List<ThreadComment> thread;
-        private long timeStamp;
+        eventEntity.setProperty("eventId", event.getEventId());
+        eventEntity.setProperty("speaker", event.getSpeaker());
+        eventEntity.setProperty("organization", event.getOrganization());
+        eventEntity.setProperty("eventDate", event.getEventDate());
+        eventEntity.setProperty("location", event.getLocation());
+        eventEntity.setProperty("ammenities", event.getAmmenities());
+        eventEntity.setProperty("externalLink", event.getExternalLink());
+        eventEntity.setProperty("publicType", event.getPublicType());
+        eventEntity.setProperty("ownerId", event.getOwnerId());
+        eventEntity.setProperty("thread", event.getThread());
+        eventEntity.setProperty("timeStamp", event.getTimeStamp());
+        datastore.put(eventEntity);
     }
 }
