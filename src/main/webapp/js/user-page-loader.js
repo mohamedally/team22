@@ -32,18 +32,19 @@ function setPageTitle() {
 /**
  * Shows the message form if the user is logged in and viewing their own page.
  */
-function showMessageFormIfLoggedIn() {
+function showMessageFormIfViewingSelf() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn) {
+        if (loginStatus.isLoggedIn &&
+            loginStatus.username == parameterUsername) {
           const messageForm = document.getElementById('message-form');
-          messageForm.action = '/messages?recipient=' + parameterUsername;
           messageForm.classList.remove('hidden');
         }
       });
+      document.getElementById('about-me-form').classList.remove('hidden');
 }
 
 /** Fetches messages and add them to the page. */
@@ -66,33 +67,59 @@ function fetchMessages() {
         });
       });
 }
+/** Fetches about me and add them to the page. */ 
+function fetchAboutMe(){
+  const url = '/about?user=' + parameterUsername;
+  fetch(url).then((response) => {
+    return response.text();
+  }).then((aboutMe) => {
+    const aboutMeContainer = document.getElementById('about-me-container');
+    if(aboutMe == ''){
+      aboutMe = 'This user has not entered any information yet.';
+    }
+    
+    aboutMeContainer.innerHTML = aboutMe;
+
+  });
+}
 
 /**
  * Builds an element that displays the message.
  * @param {Message} message
  * @return {Element}
  */
+
 function buildMessageDiv(message) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
+  headerDiv.classList.add('padded');
+
   headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' + new Date(message.timestamp)));
+      message.user + ' - ' + formatDate(message.timestamp)));
 
   const bodyDiv = document.createElement('div');
   bodyDiv.classList.add('message-body');
+  bodyDiv.classList.add('padded');
   bodyDiv.innerHTML = message.text;
 
   const messageDiv = document.createElement('div');
-  messageDiv.classList.add('message-div');
+  messageDiv.classList.add('rounded');
+  messageDiv.classList.add('panel');
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
 
   return messageDiv;
 }
 
+
+
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfLoggedIn();
+  showMessageFormIfViewingSelf();
   fetchMessages();
+  fetchAboutMe();
+  const config = {removePlugins: [ 'ImageUpload']};
+  ClassicEditor.create(document.getElementById('message-input'), config );
+
 }
