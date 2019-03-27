@@ -45,6 +45,13 @@ public class Datastore {
     messageEntity.setProperty("recipient", message.getRecipient());
     datastore.put(messageEntity);
   }
+  
+/** Returns the total number of messages for all users. */
+public int getTotalMessageCount(){
+  Query query = new Query("Message");
+  PreparedQuery results = datastore.prepare(query);
+  return results.countEntities(FetchOptions.Builder.withLimit(1000));
+}
 
   /**
    * Gets messages received by a specific user (recipient).
