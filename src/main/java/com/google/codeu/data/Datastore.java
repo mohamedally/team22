@@ -61,7 +61,12 @@ public class Datastore {
 
         return returnMessages(query, recipient);
     }
-
+    
+    /**
+    * Gets all messages without user filtering
+    *
+    * @return a list of messages , or empty list if no message has been sent. List is sorted by time descending.
+    */
     public List<Message> getAllMessages() {
         Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
 
@@ -82,8 +87,8 @@ public class Datastore {
                 recipient = recipient != null ? recipient : (String) entity.getProperty("recipient");
 
                 Message message = new Message(id, user, text, timestamp, recipient);
-
                 messages.add(message);
+            //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
             } catch (Exception e) {
                 System.err.println("Error reading message.");
                 System.err.println(entity.toString());
@@ -93,7 +98,12 @@ public class Datastore {
 
         return messages;
     }
-
+    
+    /**
+    * Gets all created user markers
+    *
+    * @return a list of markers created by any user, or empty list if none were created.
+    */
     public List<UserMarker> getMarkers() {
         List<UserMarker> markers = new ArrayList<>();
 
@@ -108,6 +118,7 @@ public class Datastore {
 
                 UserMarker marker = new UserMarker(lat, lng, content);
                 markers.add(marker);
+            //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
             } catch (Exception e) {
                 System.err.println("Error reading marker.");
                 System.err.println(entity.toString());
@@ -116,7 +127,10 @@ public class Datastore {
         }
         return markers;
     }
-
+    
+    /**
+    * Stores an user created marker
+    */
     public void storeMarker(UserMarker marker) {
         Entity markerEntity = new Entity("UserMarker");
         markerEntity.setProperty("lat", marker.getLat());
@@ -124,7 +138,12 @@ public class Datastore {
         markerEntity.setProperty("content", marker.getContent());
         datastore.put(markerEntity);
     }
-
+    
+    /**
+    * Gets all created events without a filter.
+    *
+    * @return a list of events, or empty list if none were created.
+    */
     public List<Event> getEvents(){
         List<Event> events = new ArrayList<>();
 
@@ -149,6 +168,7 @@ public class Datastore {
                 Event event = new Event(eventId, timeStamp, speaker, organization, eventDate, location, amenities, externalLink, publicType, ownerId);
                 event.copyThread(thread);
                 events.add(event);
+            //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
             } catch (Exception e) {
                 System.err.println("Error reading event.");
                 System.err.println(entity.toString());
@@ -159,7 +179,7 @@ public class Datastore {
         return events;
     }
 
-    public List<String> getAmenities(UUID eventId){
+    private List<String> getAmenities(UUID eventId){
         List<String> amenities = new ArrayList<>();
 
         Query query = new Query("Amenity").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
@@ -171,6 +191,7 @@ public class Datastore {
                 String text = (String) entity.getProperty("amenity");
 
                 amenities.add(text);
+            //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
             } catch (Exception e) {
                 System.err.println("Error reading message.");
                 System.err.println(entity.toString());
@@ -181,7 +202,7 @@ public class Datastore {
         return amenities;
     }
 
-    public List<ThreadComment> getThread(UUID eventId){
+    private List<ThreadComment> getThread(UUID eventId){
         List<ThreadComment> thread = new ArrayList<>();
 
         Query query = new Query("ThreadComment").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
@@ -196,7 +217,9 @@ public class Datastore {
                 long timestamp = (long) entity.getProperty("timestamp");
                 String user = (String) entity.getProperty("user");
                 ThreadComment comment = new ThreadComment(id, user, text, timestamp, eventId);
+                
                 thread.add(comment);
+            //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
             } catch (Exception e) {
                 System.err.println("Error reading message.");
                 System.err.println(entity.toString());
@@ -207,6 +230,9 @@ public class Datastore {
         return thread;
     }
 
+    /**
+    * Stores an event to the datastore
+    */
     public void storeEvent(Event event){
         Entity eventEntity = new Entity("Event", event.getEventId().toString());
         eventEntity.setProperty("speaker", event.getSpeaker());
@@ -226,13 +252,16 @@ public class Datastore {
         datastore.put(eventEntity);
     }   
 
-    public void storeAmenity(String amenity,UUID eventId){
+    private void storeAmenity(String amenity,UUID eventId){
         Entity amenityEntity = new Entity("Amenity");
         amenityEntity.setProperty("eventId", eventId.toString());
         amenityEntity.setProperty("amenity", amenity);
         datastore.put(amenityEntity);
     }
 
+    /**
+    * Stores a new comment to an event's thread
+    */
     public void storeThreadComment(ThreadComment comment){
         Entity threadCommentEntity = new Entity("ThreadComment", comment.getId().toString());
         threadCommentEntity.setProperty("eventId", comment.getEventId().toString());
