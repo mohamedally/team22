@@ -21,32 +21,31 @@ import com.google.gson.Gson;
 @WebServlet("/user-markers")
 public class UserMarkerServlet extends HttpServlet {
 
-    private Datastore datastore;
-    
-    @Override
-    public void init() {
-        datastore = new Datastore();
-    }
+  private Datastore datastore;
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
 
-        List<UserMarker> markers = datastore.getMarkers();
-        Gson gson = new Gson();
-        String json = gson.toJson(markers);
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("application/json");
 
-        response.getOutputStream().println(json);
-    }
+    List<UserMarker> markers = datastore.getMarkers();
+    Gson gson = new Gson();
+    String json = gson.toJson(markers);
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    response.getOutputStream().println(json);
+  }
 
-        double lat = Double.parseDouble(request.getParameter("lat"));
-        double lng = Double.parseDouble(request.getParameter("lng"));
-        String content = Jsoup.clean(request.getParameter("content"), Whitelist.none());
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    double lat = Double.parseDouble(request.getParameter("lat"));
+    double lng = Double.parseDouble(request.getParameter("lng"));
+    String content = Jsoup.clean(request.getParameter("content"), Whitelist.none());
 
-        UserMarker marker = new UserMarker(lat, lng, content);
-        datastore.storeMarker(marker);
-    }
+    UserMarker marker = new UserMarker(lat, lng, content);
+    datastore.storeMarker(marker);
+  }
 }
