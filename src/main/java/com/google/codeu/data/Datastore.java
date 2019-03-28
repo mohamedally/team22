@@ -58,20 +58,20 @@ public class Datastore {
             new Query("Message")
                 .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
                 .addSort("timestamp", SortDirection.DESCENDING);
-        
+
         return returnMessages(query, recipient);
     }
 
     public List<Message> getAllMessages() {
         Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
-    
+
         return returnMessages(query, null);
     }
 
     private List<Message> returnMessages(Query query, String recipient) {
         List<Message> messages = new ArrayList<>();
         PreparedQuery results = datastore.prepare(query);
-    
+
         for (Entity entity : results.asIterable()) {
             try {
                 String idString = entity.getKey().getName();
@@ -80,9 +80,9 @@ public class Datastore {
                 long timestamp = (long) entity.getProperty("timestamp");
                 String user = (String) entity.getProperty("user");
                 recipient = recipient != null ? recipient : (String) entity.getProperty("recipient");
-        
+
                 Message message = new Message(id, user, text, timestamp, recipient);
-        
+
                 messages.add(message);
             } catch (Exception e) {
                 System.err.println("Error reading message.");
@@ -90,23 +90,22 @@ public class Datastore {
                 e.printStackTrace();
             }
         }
-    
-        return messages;
 
+        return messages;
     }
-  
+
     public List<UserMarker> getMarkers() {
         List<UserMarker> markers = new ArrayList<>();
-    
+
         Query query = new Query("UserMarker");
         PreparedQuery results = datastore.prepare(query);
-    
+
         for (Entity entity : results.asIterable()) {
             try {
                 double lat = (double) entity.getProperty("lat");
                 double lng = (double) entity.getProperty("lng");    
                 String content = (String) entity.getProperty("content");
-            
+
                 UserMarker marker = new UserMarker(lat, lng, content);
                 markers.add(marker);
             } catch (Exception e) {
@@ -125,16 +124,15 @@ public class Datastore {
         markerEntity.setProperty("content", marker.getContent());
         datastore.put(markerEntity);
     }
-    
+
     public List<Event> getEvents(){
         List<Event> events = new ArrayList<>();
-    
+
         Query query = new Query("Event");
         PreparedQuery results = datastore.prepare(query);
-        
+
         for (Entity entity : results.asIterable()) {
             try {
-                
                 String idString = entity.getKey().getName();
                 UUID eventId = UUID.fromString(idString);
                 String speaker =  (String) entity.getProperty("speaker");
@@ -147,7 +145,7 @@ public class Datastore {
                 int ownerId =  (int) entity.getProperty("ownerId");
                 List<ThreadComment> thread =  getThread(eventId);
                 long timeStamp =  (long) entity.getProperty("timestamp");
-            
+
                 Event event = new Event(eventId, timeStamp, speaker, organization, eventDate, location, amenities, externalLink, publicType, ownerId);
                 event.copyThread(thread);
                 events.add(event);
@@ -157,21 +155,21 @@ public class Datastore {
                 e.printStackTrace();
             }
         }
-        
+
         return events;
     }
-    
+
     public List<String> getAmenities(UUID eventId){
         List<String> amenities = new ArrayList<>();
-        
+
         Query query = new Query("Amenity").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
-                .addSort("timestamp", SortDirection.DESCENDING);
+            .addSort("timestamp", SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
-        
+
         for (Entity entity : results.asIterable()) {
             try {
                 String text = (String) entity.getProperty("amenity");
-        
+
                 amenities.add(text);
             } catch (Exception e) {
                 System.err.println("Error reading message.");
@@ -179,19 +177,17 @@ public class Datastore {
                 e.printStackTrace();
             }
         }
-        
+
         return amenities;
-        
-        
     }
-    
+
     public List<ThreadComment> getThread(UUID eventId){
         List<ThreadComment> thread = new ArrayList<>();
-        
+
         Query query = new Query("ThreadComment").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
-                .addSort("timestamp", SortDirection.DESCENDING);
+            .addSort("timestamp", SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
-        
+
         for (Entity entity : results.asIterable()) {
             try {
                 String idString = entity.getKey().getName();
@@ -207,12 +203,10 @@ public class Datastore {
                 e.printStackTrace();
             }
         }
-        
+
         return thread;
-        
-        
     }
-    
+
     public void storeEvent(Event event){
         Entity eventEntity = new Entity("Event", event.getEventId().toString());
         eventEntity.setProperty("speaker", event.getSpeaker());
@@ -231,14 +225,14 @@ public class Datastore {
         eventEntity.setProperty("timeStamp", event.getTimeStamp());
         datastore.put(eventEntity);
     }   
-    
+
     public void storeAmenity(String amenity,UUID eventId){
         Entity amenityEntity = new Entity("Amenity");
         amenityEntity.setProperty("eventId", eventId.toString());
         amenityEntity.setProperty("amenity", amenity);
         datastore.put(amenityEntity);
     }
-    
+
     public void storeThreadComment(ThreadComment comment){
         Entity threadCommentEntity = new Entity("ThreadComment", comment.getId().toString());
         threadCommentEntity.setProperty("eventId", comment.getEventId().toString());
