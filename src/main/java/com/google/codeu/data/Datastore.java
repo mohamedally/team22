@@ -182,7 +182,8 @@ public class Datastore {
     private List<String> getAmenities(UUID eventId){
         List<String> amenities = new ArrayList<>();
 
-        Query query = new Query("Amenity").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
+        Query query = new Query("Amenity")
+            .setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
             .addSort("timestamp", SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
@@ -205,7 +206,8 @@ public class Datastore {
     private List<ThreadComment> getThread(UUID eventId){
         List<ThreadComment> thread = new ArrayList<>();
 
-        Query query = new Query("ThreadComment").setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
+        Query query = new Query("ThreadComment")
+            .setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
             .addSort("timestamp", SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
