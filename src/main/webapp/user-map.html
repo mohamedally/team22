@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Map</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/map.css">
-    <link rel="favicon.ico" type="image/x-icon">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD70_zBqbeqjcuZDe1mbQMo1OFE_RCmBes"></script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-    <script src="/js/user-map-loader.js"></script>
+  <title>User Map</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/map.css">
+  <link rel="favicon.ico" type="image/x-icon">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD70_zBqbeqjcuZDe1mbQMo1OFE_RCmBes"></script>
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+  <script src="/js/user-map-loader.js"></script>
   
 </head>
 <form id="marker-form" onSubmit="formSubmit(lat, lng);">
-    Latitude:<br>
-    <input type="text" name="lat">
-    <br>
-    Longitude:<br>
-    <input type="text" name="lng">
-    <br><br>
-    <input type="submit" value="Submit">
+  Latitude:<br>
+  <input type="text" name="lat">
+  <br>
+  Longitude:<br>
+  <input type="text" name="lng">
+  <br><br>
+  <input type="submit" value="Submit">
 </form> 
 <body onload="createUserMap();">
-    <h1>User Map</h1>
-    <div id="map"></div>
+  <h1>User Map</h1>
+  <div id="map"></div>
 </body>
 </html>
