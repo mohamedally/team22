@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Location {
     
-    
     private double lat;
     private double lng;
     private String locationName;
@@ -36,7 +35,6 @@ public class Location {
     public String getLocationName(){
         return locationName;
     }
-
         
     public String getCountry(){
         return country;
@@ -58,4 +56,60 @@ public class Location {
         return adressLines;
     }
     
+    public static class Builder{
+        private double lat;
+        private double lng;
+        private String locationName;
+        private String country;
+        private String state;
+        private String city;
+        private int zipcode;
+        private List<String> adressLines;
+        
+        public Builder(){}
+        
+        public Builder setLat(double lat){
+            this.lat = lat;
+            return this;
+        }
+        
+        public Builder setLng(double lng){
+            this.lng = lng;
+            return this;
+        }
+        
+        public Builder setLocationName(String locationName){
+            this.locationName = locationName;
+            return this;
+        }
+        
+        public Builder setCountry(String country){
+            this.country = country;
+            return this;
+        }
+        
+        public Builder setState(String state){
+            this.state = state;
+            return this;
+        }
+        
+        public Builder setCity(String city){
+            this.city = city;
+            return this;
+        }
+        
+        public Builder setZipcode(int zipcode){
+            this.zipcode = zipcode;
+            return this;
+        }
+        
+        public Builder setAdressLines(List<String> adressLines){
+            this.adressLines = adressLines;
+            return this;
+        }
+        
+        public Location build(){
+            return new Location(lat, lng, name, country, state, city, zipcode, adressLines)
+        }
+    } 
 }
