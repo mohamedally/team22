@@ -15,34 +15,34 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/events")
 public class EventServlet extends HttpServlet{
     
-    private Datastore datastore;
+  private Datastore datastore;
 
-    @Override
-    public void init() {
-        datastore = new Datastore();
-    }
-  
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
-        
-        BufferedReader inputBr = request.getReader();
-        
-        Event event = gson.fromJson(inputBr, Event.class);
-        
-        datastore.storeEvent(event);
-    }
-    
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
 
-        response.setContentType("application/json");    
-    
-        List<Event> events = datastore.getEvents();
-        Gson gson = new Gson();
-        String json = gson.toJson(events);
-    
-        response.getWriter().println(json);
-    }
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Gson gson = new Gson();
+
+    BufferedReader inputBr = request.getReader();
+
+    Event event = gson.fromJson(inputBr, Event.class);
+
+    datastore.storeEvent(event);
+  }
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setContentType("application/json");    
+
+    List<Event> events = datastore.getEvents();
+    Gson gson = new Gson();
+    String json = gson.toJson(events);
+
+    response.getWriter().println(json);
+  }
 
 }
