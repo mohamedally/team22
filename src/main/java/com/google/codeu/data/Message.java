@@ -35,6 +35,10 @@ public class Message {
   public Message(String user, String text, String recipient) {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), recipient);
   }
+  
+  public Message(String user, String text) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), null);
+  }
 
   public Message(UUID id, String user, String text, long timestamp, String recipient) {
     this.id = id;
