@@ -2,8 +2,10 @@ google.charts.load('current', {packages:["corechart"]});
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
+    console.log("Started");
     var chart = new google.visualization.LineChart(document.getElementById('message_chart'));
     var msgData = fetchMessageData();
+    console.log(msgData);
     var options = {
         title: "Message count by timestamp",
         height: 350,
