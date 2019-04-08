@@ -2,8 +2,60 @@
 <html>
   <head>
     <title>Chart of Messages</title>
-    <script src="/js/message-chart-loader.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="favicon.ico" type="image/x-icon"><script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {packages:['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        /** Fetches messages and add them to the page. */
+        function fetchMessageData() {
+          fetch("/messagechart")
+              .then((response) => {
+                return response.json();
+              })
+              .then((msgJson) => {
+                var msgData = new google.visualization.DataTable();
+                //define columns for the DataTable instance
+                msgData.addColumn('date', 'Date');
+                msgData.addColumn('number', 'Message Count');
+                var i;
+                var msgRow;
+                for (i = 0; i < msgJson.length; i++) {
+                  msgRow = [];
+                  var timestampAsDate = new Date (msgJson[i].timestamp);
+                  var totalMessages = i + 1;
+                  msgRow.push([timestampAsDate, totalMessages]);
+                  msgData.addRow(msgRow);
+                }
+                return msgData;
+              });
+        }
+        function drawChart() {
+            var chart = new google.visualization.LineChart(document.getElementById('message_chart'));
+            var messages = fetchMessageData();
+            console.log("hellooooooo");
+            console.log(messages);
+            var msgData = new google.visualization.DataTable();
+            msgData.addColumn('date', 'Date');
+            msgData.addColumn('number', 'Message Count');
+            msgData.addRows(messages);
+            console.log(msgData);
+            var options = {
+                title: "Message count by timestamp",
+                height: 350,
+                calendar: {
+                    underYearSpace: 10,
+                    yearLabel: {
+                        fontName: 'Times-Roman',
+                        fontSize: 32,
+                        color: '#1A8763',
+                        bold: true,
+                        italic: true
+                    }
+                }
+            };
+            chart.draw(msgData, options);
+       }
+    </script>
   </head>
   <body>
     <h1>Messages chart</h1>
