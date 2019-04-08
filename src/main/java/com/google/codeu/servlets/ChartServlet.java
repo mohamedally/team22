@@ -42,14 +42,15 @@ public class ChartServlet extends HttpServlet {
   }
 
   /**
-   * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
-   * an empty array if the user is not provided.
+   * Responds with a JSON representation of [{@link Message}] data for all users. Responds with
+   * an empty array if no messages are in the datastore.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    response.setContentType("application/json");
-    
-    response.getWriter().println("slowly but surely");
+    List<Message> messages = datastore.getAllMessages();
+    Gson gson = new Gson();
+    String json = gson.toJson(messages);
+    response.getWriter().println(json);
+
   }
 }
