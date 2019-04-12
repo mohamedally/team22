@@ -79,8 +79,13 @@ public class MessageServlet extends HttpServlet {
     String userEnteredContent = request.getParameter("text");
     Whitelist whitelist = Whitelist.relaxed();
     String text = Jsoup.clean(userEnteredContent, whitelist);
-
-    Message message = new Message(user, text);
+    Message message;
+    if (request.getParameterMap().containsKey("recipient")) {
+        String recipient = request.getParameter("recipient");
+        message = new Message(user, text, recipient);
+    } else {
+        message = new Message(user, text);
+    }
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
