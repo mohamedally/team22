@@ -14,28 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/translations")
 public class TranslationServlet extends HttpServlet{
     
-    private String test_translate(){
-        Translate translate = TranslateOptions.getDefaultInstance().getService();
-
-        String originalText = "Hello world";
-
-        Translation translation =
-        translate.translate(originalText, TranslateOption.targetLanguage("es"));
-        String translatedText = translation.getTranslatedText();
-
-        return translatedText;
-    }
-    
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
         response.setContentType("application/json");
         
         Gson gson = new Gson();
-        String json = gson.toJson(test_translate());
+        String json = gson.toJson("The translation hasn't been implemented yet");
     
         response.getWriter().println(json);
     }
-    
     
 }

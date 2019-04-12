@@ -29,13 +29,18 @@ public class Message {
 
   /**
    * Constructs a new {@link Message} posted by {@code user} with {@code text}
-   * content. Generates a random ID and uses the current system time for the
+   * content, and {@code recipient}. Generates a random ID and uses the current system time for the
    * creation time.
    */
   public Message(String user, String text, String recipient) {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), recipient);
   }
   
+  /**
+   * Constructs a new {@link Message} posted by {@code user} with {@code text}
+   * content. Generates a random ID and uses the current system time for the
+   * creation time. This is done setting the recipient to null
+   */
   public Message(String user, String text) {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), null);
   }
