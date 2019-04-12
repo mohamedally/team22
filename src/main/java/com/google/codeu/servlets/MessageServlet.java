@@ -83,7 +83,7 @@ public class MessageServlet extends HttpServlet {
     if (request.getParameterMap().containsKey("recipient")) {
         String recipient = request.getParameter("recipient");
         message = new Message(user, text, recipient);
-    } else{
+    } else {
         message = new Message(user, text);
     }
     datastore.storeMessage(message);
