@@ -6,6 +6,10 @@ public class UserMarker {
   private double lng;
   private String content;
 
+  /**
+   * Constructs a new {@link UserMarker} posted by {@code user} with {@code text}
+   * content. Also stores the latitute and longitude for the marker
+   */
   public UserMarker(double lat, double lng, String content) {
     this.lat = lat;
     this.lng = lng;

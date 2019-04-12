@@ -19,10 +19,12 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +48,13 @@ public class Datastore {
     messageEntity.setProperty("recipient", message.getRecipient());
     datastore.put(messageEntity);
   }
+  
+  /** Returns the total number of messages for all users. */
+  public int getTotalMessageCount(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    return results.countEntities(FetchOptions.Builder.withLimit(1000));
+  }
 
   /**
   * Gets messages received by a specific user (recipient).
@@ -61,7 +70,7 @@ public class Datastore {
 
     return returnMessages(query, recipient);
   }
-    
+
   /**
   * Gets all messages without user filtering
   *
@@ -69,10 +78,15 @@ public class Datastore {
   */
   public List<Message> getAllMessages() {
     Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
-
-      return returnMessages(query, null);
-    }
-
+    
+    return returnMessages(query, null);
+  }
+    
+  /**
+  * Gets all messages without user filtering
+  *
+  * @return a list of messages , or empty list if no message has been sent. List is sorted by time descending.
+  */
   private List<Message> returnMessages(Query query, String recipient) {
     List<Message> messages = new ArrayList<>();
     PreparedQuery results = datastore.prepare(query);
@@ -209,6 +223,7 @@ public class Datastore {
     Query query = new Query("ThreadComment")
         .setFilter(new Query.FilterPredicate("eventId", FilterOperator.EQUAL, eventId.toString()))
         .addSort("timestamp", SortDirection.DESCENDING);
+
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
@@ -228,7 +243,6 @@ public class Datastore {
         e.printStackTrace();
       }
     }
-
     return thread;
   }
 
