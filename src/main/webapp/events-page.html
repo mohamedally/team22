@@ -22,19 +22,24 @@
         <br/>
         <label>Organization :</label>
         <input type="text" name="organization" id="org" placeholder="Name" />
+        <br/>
         <label>Event Date (MM/DD/YY) :</label>
         <input type="text" name="eventDate" id="date"/>
+        <br/>
         <label>Speaker(optional) :</label>
         <input type="text" name="speaker" id="speaker" placeholder="Name" />
+        <br/>
         <label>External Link :</label>
         <input type="text" name="externalLink" id="email" placeholder="Valid Email" />
+        <br/>
         <label>Public Type :</label>
         <select name="publicType">
           <option value="0">All public</option>
           <option value="1">Campus wide</option>
           <option value="2">Invite Only</option>
         </select>
-        <output type="test" name="ownerId" id="ownerId" class="hidden"/>
+        <input type="button" name="submit_id" id="btn_id" value="Submit" onclick="submit_by_id()"/>
+        <input type="test" name="ownerId" id="ownerId" class="hidden"/>
       </form>
     </div>
     <hr/>
