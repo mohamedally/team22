@@ -13,34 +13,51 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>User Page</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/user-page.css">
-    <script src="/js/user-page-loader.js"></script>
-  </head>
-  <body onload="buildUI();">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/home">Home</a></li>
-      </ul>
+<head>
+  <title>User Page</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/user-page.css">
+  <script src="/js/user-page-loader.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+</head>
+<body onload="buildUI();">
+  <div id="content">
+    <nav  id="navigation">
+      <a href="/">Home</a>
+      <a href="/your-page">Your Page</a>
+      <a href="/map.html">Map</a>
+      <a href="/about.html">About our Team</a>
     </nav>
-    <h1 id="page-title">User Page</h1>
 
-    <form id="message-form" action="/messages" method="POST" class="hidden">
-      Enter a new message:
-      <br/>
-      <textarea name="text" id="message-input"></textarea>
-      <br/>
-      <input type="submit" value="Submit">
-    </form>
+    <div class="padded rounded panel centered">
+      <h1 id="page-title">User Page</h1>
+    </div>
+        <div id="about-me-container">Loading...</div>
+
+    <div id="about-me-form" class="hidden">
+      <form action="/about" method="POST">
+        <textarea name="about-me" placeholder="about me" rows=4 required></textarea>
+        <br/>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div class="padded rounded panel">
+      <form id="message-form" action="/messages" method="POST" class="hidden">
+        <h2>Enter a new message:</h2>
+        <br/>
+        <textarea name="text" id="message-input" class="rounded"></textarea>
+        <br/>
+        <input type="submit" value="Submit" class="rounded">
+      </form>
+    </div>
+
     <hr/>
 
-    <div id="message-container">Loading...</div>
-
-  </body>
+  <div id="message-container">Loading...</div>
+  </div>
+</body>
 </html>
+
