@@ -83,3 +83,34 @@ nav li {
 .hidden {
   display: none;
 }
+
+.event-div {
+  border: thin solid black;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.event-header {
+  border-bottom: thin solid black;
+  padding: 5px;
+}
+
+.event-location {
+  border-bottom: thin solid grey;
+  padding: 5px;
+}
+
+.event-speaker {
+  border-bottom: thin solid grey;
+  padding: 5px;
+}
+
+.event-details {
+  border-bottom: thin solid grey;
+  padding: 5px;
+}
+
+.event-time {
+  border-bottom: thin solid black;
+  padding: 5px;
+}

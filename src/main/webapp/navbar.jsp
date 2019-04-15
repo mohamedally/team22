@@ -9,6 +9,7 @@
   UserService userService = UserServiceFactory.getUserService();
   if (userService.isUserLoggedIn()) {
     String username = (String) userService.getCurrentUser().getEmail();
+    request.setAttribute("Username",username);
 %>
     <li><a href="/user-page.html?user=<%= username %>">Your Page</a></li>
     <li><a href="/map.jsp">Map</a></li>
