@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Message Feed</title>
-    <link rel="stylesheet" href="/css/main.css" />
-    <link rel="stylesheet" href="/css/user-page.css" />
+<jsp:include page="header.jsp"/>
     <script src="/js/feed-page-loader.js"></script>
   </head>
   <body onload="buildUI()">
+    <jsp:include page="navbar.jsp"/>
     <div id="content">
       <h1>Message Feed</h1>
       <hr />

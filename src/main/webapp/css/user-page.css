@@ -90,4 +90,9 @@ input[type=submit] {
   display: none;
 }
 
-
+/* Use this to change the size and display of images */
+.message-body img {
+  display: block;
+  margin-top: 25px;
+  max-width: 75%;
+}

@@ -48,6 +48,12 @@ limitations under the License.
       <artifactId>appengine-api-1.0-sdk</artifactId>
       <version>1.9.59</version>
     </dependency>
+    
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-translate</artifactId>
+      <version>1.55.0</version>
+    </dependency>
 
     <dependency>
       <groupId>org.jsoup</groupId>
@@ -69,6 +75,12 @@ limitations under the License.
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
         <version>1.9.59</version>
+        <!-->
+        <configuration>
+          <port>8080</port>
+          <address>0.0.0.0</address>
+        </configuration>
+        -->
       </plugin>
     </plugins>
   </build>

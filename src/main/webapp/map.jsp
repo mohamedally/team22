@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>American Universities</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/map.css">
+<jsp:include page="header.jsp"/>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD70_zBqbeqjcuZDe1mbQMo1OFE_RCmBes"></script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script src="/js/map-loader.js"></script>
-  
-</head>
-<body onload="createUniversitiesMap();">
+  </head>
+<jsp:include page="navbar.jsp"/>
+  <body onload="createUniversitiesMap();">
     <h1>American Universities</h1>
     <div id="map"></div>
-</body>
+  </body>
 </html>
