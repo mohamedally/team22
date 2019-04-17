@@ -45,10 +45,61 @@
     
             chart.draw(dataTable, options);
        }
+       // Fetch messages and add them to the page.
+  function fetchMessages(){
+    const url = '/events-chart';
+    fetch(url).then((response) => {
+      return response.json();
+    }).then((messages) => {
+      const messageContainer = document.getElementById('events');
+      if(messages.length == 0){
+       messageContainer.innerHTML = '<p>There are no events yet.</p>';
+      }
+      else{
+       messageContainer.innerHTML = '';  
+      }
+      messages.forEach((message) => {  
+       const messageDiv = buildMessageDiv(message);
+       messageContainer.appendChild(messageDiv);
+      });
+    });
+  }
+  
+  function buildMessageDiv(message){
+   const speakerDiv = document.createElement('div');
+   speakerDiv.classList.add("left-align");
+   speakerDiv.appendChild(document.createTextNode(message.speaker));
+   
+   const timeDiv = document.createElement('div');
+   timeDiv.classList.add('right-align');
+   timeDiv.appendChild(document.createTextNode(new Date(message.eventDate)));
+   
+   const headerDiv = document.createElement('div');
+   headerDiv.classList.add('message-header');
+   headerDiv.appendChild(speakerDiv);
+   headerDiv.appendChild(timeDiv);
+   
+   const bodyDiv = document.createElement('div');
+   bodyDiv.classList.add('message-body');
+   bodyDiv.appendChild(document.createTextNode(message.location));
+   
+   const messageDiv = document.createElement('div');
+   messageDiv.classList.add("message-div");
+   messageDiv.appendChild(headerDiv);
+   messageDiv.appendChild(bodyDiv);
+   
+   return messageDiv;
+  }
+  
+  // Fetch data and populate the UI of the page.
+  function buildUI(){
+   fetchMessages();
+  }
     </script>
   </head>
-  <body>
+  <body onload="buildUI()">
     <h1>Events calendar</h1>
     <div id="events_calendar" style="width: 1000px; height: 350px;"></div>
   </body>
+
 </html>
