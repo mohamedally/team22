@@ -109,7 +109,7 @@ public class Location {
     }
 
     public Location build(){
-      return new Location(lat, lng, name, country, state, city, zipcode, adressLines)
+      return new Location(lat, lng, locationName, country, state, city, zipcode, adressLines);
     }
   } 
 }
