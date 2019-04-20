@@ -9,13 +9,7 @@ function submit_by_id() {
     xmlhttp.open("POST", "/events");
     xmlhttp.setRequestHeader("Content-Type", "application/json"); 
     xmlhttp.send(formData);
-    xmlhttp.onreadystatechange = function() {
-      if(this.readyState == this.HEADERS_RECEIVED) {
-        var eventId = client.getResponseHeader("Storage_confirmation");
-        alert("Event created: " + eventId);
-      }
-    }
-    
+    alert("Event created");
   }
 }
 
