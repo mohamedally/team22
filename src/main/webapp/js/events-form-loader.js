@@ -23,8 +23,8 @@ function submit_by_id() {
  * Validates that all necessary fields are filled
  */
 function validation() {
-  var organization = document.getElementByName("organization")
-  var eventDate = document.getElementByName("eventDate")
+  var organization = document.getElementById("organization")
+  var eventDate = document.getElementById("eventDate")
   if (organization === '' || eventDate === '') {
     alert("Please fill all organization and event date");
     return false;
