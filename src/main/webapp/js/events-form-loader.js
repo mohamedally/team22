@@ -4,8 +4,18 @@
 function submit_by_id() {
   if (validation()) // Calling validation function
   {
-    document.getElementById("events-form").submit(); //form submission
-    alert("Event created");
+    var formData = JSON.stringify($("events-form").serializeArray());
+    var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+    xmlhttp.open("POST", "/events");
+    xmlhttp.setRequestHeader("Content-Type", "application/json"); 
+    xmlhttp.send(formData);
+    xmlhttp.onreadystatechange = function() {
+      if(this.readyState == this.HEADERS_RECEIVED) {
+        var eventId = client.getResponseHeader("Storage_confirmation");
+        alert("Event created: " + eventId);
+      }
+    }
+    
   }
 }
 
