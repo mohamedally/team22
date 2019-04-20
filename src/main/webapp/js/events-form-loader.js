@@ -4,7 +4,11 @@
 function submit_by_id() {
   if (validation()) // Calling validation function
   {
-    document.getElementById("events-form").submit(); //form submission
+    var formData = JSON.stringify($("events-form").serializeArray());
+    var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+    xmlhttp.open("POST", "/events");
+    xmlhttp.setRequestHeader("Content-Type", "application/json"); 
+    xmlhttp.send(formData);
     alert("Event created");
   }
 }
@@ -13,8 +17,8 @@ function submit_by_id() {
  * Validates that all necessary fields are filled
  */
 function validation() {
-  var organization = document.getElementByName("organization")
-  var eventDate = document.getElementByName("eventDate")
+  var organization = document.getElementById("organization")
+  var eventDate = document.getElementById("eventDate")
   if (organization === '' || eventDate === '') {
     alert("Please fill all organization and event date");
     return false;

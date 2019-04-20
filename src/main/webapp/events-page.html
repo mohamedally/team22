@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <script src="/js/events-form-loader.js"></script>
   <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </head>
 <body onload="showEventsFormIfLoggedIn();">
   <div id="content">
@@ -17,7 +18,7 @@
     </nav>
 
     <div class="padded rounded panel">
-      <form id="events-form" action="/events" method="POST" class="hidden">
+      <form id="events-form" action="" class="hidden">
         <h2>Submit a new event:</h2>
         <br/>
         <label>Organization :</label>
@@ -39,7 +40,7 @@
           <option value="2">Invite Only</option>
         </select>
         <input type="button" name="submit_id" id="btn_id" value="Submit" onclick="submit_by_id()"/>
-        <input type="test" name="ownerId" id="ownerId" class="hidden"/>
+        <output type="test" name="ownerId" id="ownerId" class="hidden"/>
       </form>
     </div>
     <hr/>
