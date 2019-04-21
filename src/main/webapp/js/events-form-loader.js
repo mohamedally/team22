@@ -39,7 +39,7 @@ function showEventsFormIfLoggedIn() {
         if (loginStatus.isLoggedIn) {
           const eventsForm = document.getElementById('events-form');
           eventsForm.classList.remove('hidden');
-          document.getElementById("ownerId").value = paraeterUsername;
+          document.getElementById("ownerId").value = 0; //Temporary until link to this page is set to have the user parameter
         }
       });
 }

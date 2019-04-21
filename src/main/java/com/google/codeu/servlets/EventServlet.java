@@ -28,9 +28,9 @@ public class EventServlet extends HttpServlet{
 
     BufferedReader inputBr = request.getReader();
 
-    Event event = gson.fromJson(inputBr, Event.class);
+    Event[] events = gson.fromJson(inputBr, Event[].class);
 
-    datastore.storeEvent(event);
+    datastore.storeEvent(event[0]);
     
     response.addHeader("Storage_confirmation", event.getEventId().toString());
   }
