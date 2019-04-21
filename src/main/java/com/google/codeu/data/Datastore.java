@@ -170,7 +170,7 @@ public class Datastore {
         UUID eventId = UUID.fromString(idString);
         String speaker =  (String) entity.getProperty("speaker");
         String organization =  (String) entity.getProperty("organization");
-        Date eventDate =  (Date) entity.getProperty("eventDate");
+        String eventDate =  (String) entity.getProperty("eventDate");
         Location location =  (Location) entity.getProperty("location");
         List<String> amenities =  getAmenities(eventId);
         String externalLink =  (String) entity.getProperty("externalLink");
@@ -254,17 +254,24 @@ public class Datastore {
     eventEntity.setProperty("speaker", event.getSpeaker());
     eventEntity.setProperty("organization", event.getOrganization());
     eventEntity.setProperty("eventDate", event.getEventDate());
-    eventEntity.setProperty("location", event.getLocation());
-    for (String am: event.getAmenities()){
-      storeAmenity(am, event.getEventId());
-    }
     eventEntity.setProperty("externalLink", event.getExternalLink());
-    eventEntity.setProperty("publicType", event.getPublicType());
     eventEntity.setProperty("ownerId", event.getOwnerId());
-    for (ThreadComment cm: event.getThread()){
-      storeThreadComment(cm);
-    }
+    eventEntity.setProperty("publicType", event.getPublicType());
     eventEntity.setProperty("timeStamp", event.getTimeStamp());
+    //This try/catch statement is to prevent null pointer exceptions from fields that might not be defined yet in an event
+    //Currently, the events form does not handle these fields so they are in the try catch together
+    try{
+      eventEntity.setProperty("location", event.getLocation());
+      for (String am: event.getAmenities()){
+        storeAmenity(am, event.getEventId());
+      }
+      for (ThreadComment cm: event.getThread()){
+        storeThreadComment(cm);
+      }
+    }catch(NullPointerException e){
+      eventEntity.setProperty("location", null);
+    }
+    
     datastore.put(eventEntity);
   }   
 

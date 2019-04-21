@@ -27,12 +27,10 @@ public class EventServlet extends HttpServlet{
     Gson gson = new Gson();
 
     BufferedReader inputBr = request.getReader();
-
-    Event[] events = gson.fromJson(inputBr, Event[].class);
-
-    datastore.storeEvent(events[0]);
+    Event event = gson.fromJson(inputBr, Event.class);
+    datastore.storeEvent(event);
     
-    response.addHeader("Storage_confirmation", events[0].getEventId().toString());
+    response.addHeader("Storage_confirmation", event.getEventId().toString());
   }
 
   @Override
