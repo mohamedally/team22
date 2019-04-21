@@ -1,6 +1,5 @@
 package com.google.codeu.data;
 
-import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -14,7 +13,7 @@ public class Event {
   private UUID eventId;
   private String speaker;
   private String organization;
-  private Date eventDate;
+  private String eventDate; //This change was made to stop the errors when serializing back and forth from json format
   private Location location;
   private List<String> amenities;
   private String externalLink;
@@ -23,11 +22,11 @@ public class Event {
   private List<ThreadComment> thread;
   private long timeStamp;
 
-  public Event(String speaker, String organization, Date eventDate, Location location, List<String> amenities, String externalLink, PublicType publicType, int ownerId){
+  public Event(String speaker, String organization, String eventDate, Location location, List<String> amenities, String externalLink, PublicType publicType, int ownerId){
     this(UUID.randomUUID(), System.currentTimeMillis(), speaker, organization, eventDate, location, amenities, externalLink, publicType, ownerId);
   }
 
-  public Event(UUID id, long timeStamp, String speaker, String organization, Date eventDate, Location location, List<String> amenities, String externalLink, PublicType publicType, int ownerId){
+  public Event(UUID id, long timeStamp, String speaker, String organization, String eventDate, Location location, List<String> amenities, String externalLink, PublicType publicType, int ownerId){
     this.eventId = id;
     this.speaker = speaker;
     this.organization = organization;
@@ -40,8 +39,11 @@ public class Event {
     this.thread = new ArrayList<ThreadComment>();
     this.timeStamp = timeStamp;
   }
-
+  
   public UUID getEventId(){
+    if (eventId == null){
+      this.eventId = UUID.randomUUID();
+    }
     return eventId;
   }
 
@@ -53,7 +55,7 @@ public class Event {
     return organization;
   }
 
-  public Date getEventDate(){
+  public String getEventDate(){
     return eventDate;
   }
 
