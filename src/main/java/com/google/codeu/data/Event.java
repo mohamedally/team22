@@ -13,7 +13,7 @@ public class Event {
   private UUID eventId;
   private String speaker;
   private String organization;
-  private String eventDate;
+  private String eventDate; //This change was made to stop the errors when serializing back and forth from json format
   private Location location;
   private List<String> amenities;
   private String externalLink;
