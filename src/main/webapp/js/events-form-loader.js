@@ -38,8 +38,10 @@ function showEventsFormIfLoggedIn() {
       .then((loginStatus) => {
         if (loginStatus.isLoggedIn) {
           const eventsForm = document.getElementById('events-form');
+          messageForm.action = '/events?recipient=' + parameterUsername;
           eventsForm.classList.remove('hidden');
           document.getElementById("ownerId").value = 0; //Temporary until link to this page is set to have the user parameter
+          buildMessageDiv();
         }
       });
 }
@@ -58,4 +60,72 @@ function formToJson(form){
 	}
 
 	return JSON.stringify( obj );
+  function fetchMessages(){
+    const url = '/events-chart';
+    fetch(url).then((response) => {
+      return response.json();
+    }).then((messages) => {
+      const messageContainer = document.getElementById('events');
+      if(messages.length == 0){
+       messageContainer.innerHTML = '<p>There are no events yet.</p>';
+      }
+      else{
+       messageContainer.innerHTML = '';  
+      }
+      messages.forEach((message) => {  
+       const messageDiv = buildMessageDiv(message);
+       messageContainer.appendChild(messageDiv);
+      });
+    });
+  }
+  /** Fetches messages and add them to the page. */
+function fetchMessages() {
+  const url = '/events?user=' + parameterUsername;
+  fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((messages) => {
+        const messagesContainer = document.getElementById('events-container');
+        if (messages.length == 0) {
+          messagesContainer.innerHTML = '<p>This user has no events yet.</p>';
+        } else {
+          messagesContainer.innerHTML = '';
+        }
+        messages.forEach((message) => {
+          const messageDiv = buildMessageDiv(message);
+          messagesContainer.appendChild(messageDiv);
+        });
+      });
+}
+
+
+/**
+ * Builds an element that displays the message.
+ * @param {Message} message
+ * @return {Element}
+ */
+function buildMessageDiv(message) {
+  const headerDiv = document.createElement('div');
+  headerDiv.classList.add('message-header');
+  headerDiv.appendChild(document.createTextNode(
+      message.user + ' - ' + new Date(message.timestamp)));
+
+  const bodyDiv = document.createElement('div');
+  bodyDiv.classList.add('message-body');
+  bodyDiv.innerHTML = message.text;
+
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('message-div');
+  messageDiv.appendChild(headerDiv);
+  messageDiv.appendChild(bodyDiv);
+
+  return messageDiv;
+}
+
+/** Fetches data and populates the UI of the page. */
+function buildUI() {
+  showMessageFormIfLoggedIn();
+  fetchMessages();
+}  
 }
