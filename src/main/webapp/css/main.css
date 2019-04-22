@@ -17,6 +17,7 @@
 /* Prevent the page from becoming too wide. */
 body {
   max-width: 600px;
+  padding-left: 5%;
 }
 
 /* Remove bullet points from navigation bar. */
