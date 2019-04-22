@@ -6,6 +6,13 @@
 <% String username = request.getAttribute("Username").toString(); %>
 <h1>Username: <%= username %></h1>
 <br/>
+
+<script>
+  const events = []
+  fetch("/events")
+    .then(response => {return response.json()})
+    .then(data => console.log(data))
+</script>
 <h2>Events you posted</h2>
 <div class="event-div">
   <div class="event-header">  A talk on diversity </div>
