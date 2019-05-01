@@ -48,45 +48,46 @@ public class Datastore {
     messageEntity.setProperty("recipient", message.getRecipient());
     datastore.put(messageEntity);
   }
-  
+
   /** Returns the total number of messages for all users. */
-  public int getTotalMessageCount(){
+  public int getTotalMessageCount() {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
   }
 
   /**
-  * Gets messages received by a specific user (recipient).
-  *
-  * @return a list of messages received by a user, or empty list if user has
-  *         never received a message. List is sorted by time descending.
-  */
+   * Gets messages received by a specific user (recipient).
+   *
+   * @return a list of messages received by a user, or empty list if user has
+   *         never received a message. List is sorted by time descending.
+   */
   public List<Message> getMessages(String recipient) {
-    Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
-            .addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Message")
+        .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
+        .addSort("timestamp", SortDirection.DESCENDING);
 
     return returnMessages(query, recipient);
   }
 
   /**
-  * Gets all messages without user filtering
-  *
-  * @return a list of messages , or empty list if no message has been sent. List is sorted by time descending.
-  */
+   * Gets all messages without user filtering
+   *
+   * @return a list of messages , or empty list if no message has been sent. List
+   *         is sorted by time descending.
+   */
   public List<Message> getAllMessages() {
     Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
-    
+
     return returnMessages(query, null);
   }
-    
+
   /**
-  * Gets all messages without user filtering
-  *
-  * @return a list of messages , or empty list if no message has been sent. List is sorted by time descending.
-  */
+   * Gets all messages without user filtering
+   *
+   * @return a list of messages , or empty list if no message has been sent. List
+   *         is sorted by time descending.
+   */
   private List<Message> returnMessages(Query query, String recipient) {
     List<Message> messages = new ArrayList<>();
     PreparedQuery results = datastore.prepare(query);
@@ -102,7 +103,8 @@ public class Datastore {
 
         Message message = new Message(id, user, text, timestamp, recipient);
         messages.add(message);
-      //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
+        // An exception can occur here for multiple reasons (Type casting error, any
+        // property not existing, key error, etc...)
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -112,12 +114,13 @@ public class Datastore {
 
     return messages;
   }
-    
+
   /**
-  * Gets all created user markers
-  *
-  * @return a list of markers created by any user, or empty list if none were created.
-  */
+   * Gets all created user markers
+   *
+   * @return a list of markers created by any user, or empty list if none were
+   *         created.
+   */
   public List<UserMarker> getMarkers() {
     List<UserMarker> markers = new ArrayList<>();
 
@@ -127,12 +130,13 @@ public class Datastore {
     for (Entity entity : results.asIterable()) {
       try {
         double lat = (double) entity.getProperty("lat");
-        double lng = (double) entity.getProperty("lng");    
+        double lng = (double) entity.getProperty("lng");
         String content = (String) entity.getProperty("content");
 
         UserMarker marker = new UserMarker(lat, lng, content);
         markers.add(marker);
-      //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
+        // An exception can occur here for multiple reasons (Type casting error, any
+        // property not existing, key error, etc...)
       } catch (Exception e) {
         System.err.println("Error reading marker.");
         System.err.println(entity.toString());
@@ -141,10 +145,10 @@ public class Datastore {
     }
     return markers;
   }
-    
+
   /**
-  * Stores an user created marker
-  */
+   * Stores an user created marker
+   */
   public void storeMarker(UserMarker marker) {
     Entity markerEntity = new Entity("UserMarker");
     markerEntity.setProperty("lat", marker.getLat());
@@ -152,13 +156,13 @@ public class Datastore {
     markerEntity.setProperty("content", marker.getContent());
     datastore.put(markerEntity);
   }
-    
+
   /**
-  * Gets all created events without a filter.
-  *
-  * @return a list of events, or empty list if none were created.
-  */
-  public List<Event> getEvents(){
+   * Gets all created events without a filter.
+   *
+   * @return a list of events, or empty list if none were created.
+   */
+  public List<Event> getEvents() {
     List<Event> events = new ArrayList<>();
 
     Query query = new Query("Event");
@@ -168,21 +172,23 @@ public class Datastore {
       try {
         String idString = entity.getKey().getName();
         UUID eventId = UUID.fromString(idString);
-        String speaker =  (String) entity.getProperty("speaker");
-        String organization =  (String) entity.getProperty("organization");
-        String eventDate =  (String) entity.getProperty("eventDate");
-        Location location =  (Location) entity.getProperty("location");
-        List<String> amenities =  getAmenities(eventId);
-        String externalLink =  (String) entity.getProperty("externalLink");
-        PublicType publicType =  (PublicType) entity.getProperty("publicType");
-        int ownerId =  (int) entity.getProperty("ownerId");
-        List<ThreadComment> thread =  getThread(eventId);
-        long timeStamp =  (long) entity.getProperty("timestamp");
+        String speaker = (String) entity.getProperty("speaker");
+        String organization = (String) entity.getProperty("organization");
+        String eventDate = (String) entity.getProperty("eventDate");
+        Location location = (Location) entity.getProperty("location");
+        List<String> amenities = getAmenities(eventId);
+        String externalLink = (String) entity.getProperty("externalLink");
+        PublicType publicType = (PublicType) entity.getProperty("publicType");
+        long ownerId = (long) entity.getProperty("ownerId");
+        List<ThreadComment> thread = getThread(eventId);
+        // long timeStamp = (long) entity.getProperty("timestamp");
 
-        Event event = new Event(eventId, timeStamp, speaker, organization, eventDate, location, amenities, externalLink, publicType, ownerId);
+        Event event = new Event(eventId, speaker, organization, eventDate, location, amenities, externalLink,
+            publicType, ownerId);
         event.copyThread(thread);
         events.add(event);
-      //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
+        // An exception can occur here for multiple reasons (Type casting error, any
+        // property not existing, key error, etc...)
       } catch (Exception e) {
         System.err.println("Error reading event.");
         System.err.println(entity.toString());
@@ -193,7 +199,7 @@ public class Datastore {
     return events;
   }
 
-  private List<String> getAmenities(UUID eventId){
+  private List<String> getAmenities(UUID eventId) {
     List<String> amenities = new ArrayList<>();
 
     Query query = new Query("Amenity")
@@ -206,7 +212,8 @@ public class Datastore {
         String text = (String) entity.getProperty("amenity");
 
         amenities.add(text);
-      //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
+        // An exception can occur here for multiple reasons (Type casting error, any
+        // property not existing, key error, etc...)
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -217,7 +224,7 @@ public class Datastore {
     return amenities;
   }
 
-  private List<ThreadComment> getThread(UUID eventId){
+  private List<ThreadComment> getThread(UUID eventId) {
     List<ThreadComment> thread = new ArrayList<>();
 
     Query query = new Query("ThreadComment")
@@ -236,7 +243,8 @@ public class Datastore {
         ThreadComment comment = new ThreadComment(id, user, text, timestamp, eventId);
 
         thread.add(comment);
-      //An exception can occur here for multiple reasons (Type casting error, any property not existing, key error, etc...)
+        // An exception can occur here for multiple reasons (Type casting error, any
+        // property not existing, key error, etc...)
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -247,9 +255,9 @@ public class Datastore {
   }
 
   /**
-  * Stores an event to the datastore
-  */
-  public void storeEvent(Event event){
+   * Stores an event to the datastore
+   */
+  public void storeEvent(Event event) {
     Entity eventEntity = new Entity("Event", event.getEventId().toString());
     eventEntity.setProperty("speaker", event.getSpeaker());
     eventEntity.setProperty("organization", event.getOrganization());
@@ -257,25 +265,27 @@ public class Datastore {
     eventEntity.setProperty("externalLink", event.getExternalLink());
     eventEntity.setProperty("ownerId", event.getOwnerId());
     eventEntity.setProperty("publicType", event.getPublicType());
-    eventEntity.setProperty("timeStamp", event.getTimeStamp());
-    //This try/catch statement is to prevent null pointer exceptions from fields that might not be defined yet in an event
-    //Currently, the events form does not handle these fields so they are in the try catch together
-    try{
+    // eventEntity.setProperty("timeStamp", event.getTimeStamp());
+    // This try/catch statement is to prevent null pointer exceptions from fields
+    // that might not be defined yet in an event
+    // Currently, the events form does not handle these fields so they are in the
+    // try catch together
+    try {
       eventEntity.setProperty("location", event.getLocation());
-      for (String am: event.getAmenities()){
+      for (String am : event.getAmenities()) {
         storeAmenity(am, event.getEventId());
       }
-      for (ThreadComment cm: event.getThread()){
+      for (ThreadComment cm : event.getThread()) {
         storeThreadComment(cm);
       }
-    }catch(NullPointerException e){
+    } catch (NullPointerException e) {
       eventEntity.setProperty("location", null);
     }
-    
-    datastore.put(eventEntity);
-  }   
 
-  private void storeAmenity(String amenity,UUID eventId){
+    datastore.put(eventEntity);
+  }
+
+  private void storeAmenity(String amenity, UUID eventId) {
     Entity amenityEntity = new Entity("Amenity");
     amenityEntity.setProperty("eventId", eventId.toString());
     amenityEntity.setProperty("amenity", amenity);
@@ -283,9 +293,9 @@ public class Datastore {
   }
 
   /**
-  * Stores a new comment to an event's thread
-  */
-  public void storeThreadComment(ThreadComment comment){
+   * Stores a new comment to an event's thread
+   */
+  public void storeThreadComment(ThreadComment comment) {
     Entity threadCommentEntity = new Entity("ThreadComment", comment.getId().toString());
     threadCommentEntity.setProperty("eventId", comment.getEventId().toString());
     threadCommentEntity.setProperty("user", comment.getUser());
@@ -301,24 +311,23 @@ public class Datastore {
     userEntity.setProperty("aboutMe", user.getAboutMe());
     datastore.put(userEntity);
   }
-   
+
   /**
-  * Returns the User owned by the email address, or
-  * null if no matching User was found.
-  */
+   * Returns the User owned by the email address, or null if no matching User was
+   * found.
+   */
   public User getUser(String email) {
-   
-    Query query = new Query("User")
-      .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+
+    Query query = new Query("User").setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
-    if(userEntity == null) {
+    if (userEntity == null) {
       return null;
     }
-    
+
     String aboutMe = (String) userEntity.getProperty("aboutMe");
     User user = new User(email, aboutMe);
-    
+
     return user;
   }
 }

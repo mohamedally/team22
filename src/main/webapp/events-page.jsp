@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Events Page</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/main.css">
+<jsp:include page="header.jsp"/>
   <script src="/js/events-form-loader.js"></script>
   <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </head>
+
 <body onload="showEventsFormIfLoggedIn();">
   <div id="content">
-    <nav  id="navigation">
-      <a href="/">Home</a>
-      <a href="/your-page">Your Page</a>
-      <a href="/map.html">Map</a>
-      <a href="/about.html">About our Team</a>
-    </nav>
-
+   <jsp:include page="navbar.jsp"/>
     <div class="padded rounded panel">
       <form id="events-form" action="" class="hidden">
         <h2>Submit a new event:</h2>
@@ -46,5 +36,5 @@
     <hr/>
   </div>
 </body>
-</html>
+<jsp:include page="footer.jsp"/>
 

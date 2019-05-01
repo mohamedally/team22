@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Handles fetching and saving {@link Event} instances. */
 @WebServlet("/events")
-public class EventServlet extends HttpServlet{
-    
+public class EventServlet extends HttpServlet {
+
   private Datastore datastore;
 
   @Override
@@ -29,16 +29,18 @@ public class EventServlet extends HttpServlet{
     BufferedReader inputBr = request.getReader();
     Event event = gson.fromJson(inputBr, Event.class);
     datastore.storeEvent(event);
-    
+
     response.addHeader("Storage_confirmation", event.getEventId().toString());
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    response.setContentType("application/json");    
+    response.setContentType("application/json");
 
     List<Event> events = datastore.getEvents();
+
+    System.out.print(events);
     Gson gson = new Gson();
     String json = gson.toJson(events);
 

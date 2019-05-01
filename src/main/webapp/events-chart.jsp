@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Chart of events</title>
+<jsp:include page="header.jsp"/>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {packages:["calendar"]});
@@ -97,9 +94,10 @@
   }
     </script>
   </head>
+<jsp:include page="navbar.jsp"/>
   <body onload="buildUI()">
     <h1>Events calendar</h1>
     <div id="events_calendar" style="width: 1000px; height: 350px;"></div>
   </body>
 
-</html>
+<jsp:include page="footer.jsp"/>
