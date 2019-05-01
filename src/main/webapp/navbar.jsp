@@ -20,6 +20,8 @@
     <a class="nav-item nav-link" href="/user-page.html?user=<%= username %>">Your page</a>
     <a class="nav-item nav-link" href="/map.jsp">Map</a>
     <a class="nav-item nav-link" href="/feed.jsp">Public feed</a>
+    <a class="nav-item nav-link" href="/events-page.jsp">Make event</a>
+    <a class="nav-item nav-link" href="/events-chart.jsp">events chart</a>
     <a class="nav-item nav-link" href="/logout">Logout</a>
 <% } else {   %>
     <a class="nav-item nav-link" href="/login">Login</a>
